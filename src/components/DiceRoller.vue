@@ -9,14 +9,14 @@
       </section>
     </form>
     <section class="preview" v-if="rolls.length > 0">
-      <Dice v-for="(roll, index) in rolls" :key="index" :roll="roll" />
+      <Dice v-for="(roll, index) in rolls" :key="`${roll}-${index}-${countRolls}`" :roll="roll" />
     </section>
     <section v-else-if="showWarning" class="warning">Select a number of rolles first</section>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import createRange from '../utils/createRange';
 import getRandomIntInRange from '../utils/getRandomIntInRange';
 import Dice from './Dice.vue';
@@ -26,6 +26,11 @@ const MIN_SELECTION = 1;
 const selection = ref<number | undefined>();
 const showWarning = ref<boolean>(false)
 const rolls = ref<Array<number>>([]);
+const countRolls = ref<number>(0)
+
+const resetCountRolls = () => {
+  countRolls.value = 0;
+}
 
 const resetRolls = () => {
   rolls.value = [];
@@ -47,19 +52,33 @@ const saveSelection = () => {
   numOfRolls.forEach(() => {
     const randomRoll = getRandomIntInRange(1, 6);
     rolls.value.push(randomRoll)
-  })
+  });
+  countRolls.value++
 }
 
 const handleSelection = (e: Event) => {
   const target = e.target as HTMLInputElement;
+
   if (!target.value) {
     resetSelection();
     resetRolls();
+    resetCountRolls();
     return;
   }
-  selection.value = parseInt(target.value);
+
+  const selectedValue = parseInt(target.value);
+  const isTheSameSelection = selection.value === selectedValue;
+  if (isTheSameSelection) {
+    return;
+  }
+  selection.value = selectedValue;
 }
 
+onUnmounted(() => {
+  resetRolls();
+  resetCountRolls();
+  resetSelection()
+})
 </script>
 
 <style scoped>

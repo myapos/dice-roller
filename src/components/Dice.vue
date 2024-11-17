@@ -1,11 +1,39 @@
 <template>
-    <section class="dice">
-        <section class="dot" v-for="(, index) in createRange(1, roll)" :class="classes(roll, index)"></section>
+    <section class="dice" :class="{ rolling: isRolling }">
+        <section class="dot" v-for="(, index) in createRange(1, activeRoll)" :class="classes(activeRoll, index)">
+        </section>
     </section>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import createRange from '../utils/createRange';
+import getRandomIntInRange from '../utils/getRandomIntInRange';
+const ANIMATION_DURATION = 1000; //ms
+
+const isRolling = ref<boolean>(true);
+const randomRoll = ref<number>(getRandomIntInRange(1, 6));
+const MIN_ROLL_NUMBER = 1;
+const MAX_ROLL_NUMBER = 6;
+
+onMounted(() => {
+    let intervalId: number;
+    setTimeout(() => {
+        isRolling.value = false;
+    }, ANIMATION_DURATION)
+
+    intervalId = setInterval(() => {
+        randomRoll.value = getRandomIntInRange(MIN_ROLL_NUMBER, MAX_ROLL_NUMBER)
+        if (!isRolling.value) {
+            clearInterval(intervalId)
+        }
+    }, Math.floor(ANIMATION_DURATION / 20))
+
+})
+
+onUnmounted(() => {
+    isRolling.value = true;
+})
 
 const classes = (roll: number, index: number) => {
     /* ones */
@@ -115,7 +143,16 @@ const classes = (roll: number, index: number) => {
     return ''
 }
 
-defineProps<{ roll: number }>()
+const props = defineProps<{ roll: number }>()
+
+const activeRoll = computed(() => {
+    if (isRolling.value) {
+        return randomRoll.value
+    }
+
+    return props.roll
+})
+
 </script>
 
 <style scoped>
@@ -135,7 +172,33 @@ defineProps<{ roll: number }>()
     gap: .5rem;
     grid-template-areas: "first-start first-middle first-end"
         "second-start second-middle second-end"
-        "third-start third-middle third-end"
+        "third-start third-middle third-end";
+}
+
+.rolling {
+    animation: roll 0.8s ease-in-out infinite;
+}
+
+@keyframes roll {
+    0% {
+        transform: rotate(0deg) rotateY(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(90deg) rotateY(90deg) scale(1.2);
+    }
+
+    50% {
+        transform: rotate(180deg) rotateY(180deg) scale(1);
+    }
+
+    75% {
+        transform: rotate(270deg) rotateY(270deg) scale(1.2);
+    }
+
+    100% {
+        transform: rotate(360deg) rotateY(360deg) scale(1);
+    }
 }
 
 .dot {
