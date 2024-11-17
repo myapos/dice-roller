@@ -1,7 +1,7 @@
 <template>
   <section class="dice_roller">
     <form @submit.prevent="saveSelection">
-      <label for="num_of_rolls">Number of Dice</label>
+      <label for="num_of_rolls">Number of Dices</label>
       <section class="action">
         <input type="number" id="num_of_rolls" name="num_of_rolls" :value="selection" @input="handleSelection"
           :max="MAX_SELECTION" :min="MIN_SELECTION">
@@ -51,9 +51,9 @@ const saveSelection = () => {
 
   numOfRolls.forEach(() => {
     const randomRoll = getRandomIntInRange(1, 6);
-    rolls.value.push(randomRoll)
+    rolls.value.push(randomRoll);
   });
-  countRolls.value++
+  countRolls.value++;
 }
 
 const handleSelection = (e: Event) => {
