@@ -3,8 +3,8 @@
     <form @submit.prevent="saveSelection">
       <label for="num_of_rolls">Number of Dice</label>
       <section class="action">
-        <input type="number" id="num_of_rolls" name="num_of_rolls" :value="selection" @input="handleSelection" max="12"
-          min="1">
+        <input type="number" id="num_of_rolls" name="num_of_rolls" :value="selection" @input="handleSelection"
+          :max="MAX_SELECTION" :min="MIN_SELECTION">
         <button type="submit">Roll</button>
       </section>
     </form>
@@ -20,6 +20,8 @@ import { ref } from 'vue';
 import createRange from '../utils/createRange';
 import getRandomIntInRange from '../utils/getRandomIntInRange';
 import Dice from './Dice.vue';
+const MAX_SELECTION = 12;
+const MIN_SELECTION = 1;
 
 const selection = ref<number | undefined>();
 const showWarning = ref<boolean>(false)
@@ -74,8 +76,6 @@ const handleSelection = (e: Event) => {
   --fontSize: 1rem;
   --gap: 5px;
 }
-
-
 
 form label {
   font-size: 1rem;
