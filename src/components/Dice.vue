@@ -1,5 +1,7 @@
 <template>
-    <div class="dot" v-for="(, index) in createRange(1, roll)" :class="classes(roll, index)"></div>
+    <section class="dice">
+        <section class="dot" v-for="(, index) in createRange(1, roll)" :class="classes(roll, index)"></section>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -117,6 +119,25 @@ defineProps<{ roll: number }>()
 </script>
 
 <style scoped>
+.dice {
+    border-radius: var(--borderRadius);
+    background-color: white;
+    width: 5rem;
+    height: 5rem;
+    border: .2px solid black;
+    border-radius: 0.5rem;
+    padding: 2px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: .5rem;
+    grid-template-areas: "first-start first-middle first-end"
+        "second-start second-middle second-end"
+        "third-start third-middle third-end"
+}
+
 .dot {
     width: 1rem;
     height: 1rem;
@@ -159,5 +180,29 @@ defineProps<{ roll: number }>()
 
 .position-third-end {
     grid-area: third-end;
+}
+
+@media screen and (max-width:768px) {
+    .dice {
+        width: 3rem;
+        height: 3rem
+    }
+
+    .dot {
+        width: 0.5rem;
+        height: 0.5rem
+    }
+}
+
+@media screen and (max-width:576px) {
+    .dice {
+        width: 2rem;
+        height: 2rem
+    }
+
+    .dot {
+        width: 0.3rem;
+        height: 0.3rem
+    }
 }
 </style>

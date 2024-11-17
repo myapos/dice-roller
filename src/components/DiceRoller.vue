@@ -9,9 +9,7 @@
       </section>
     </form>
     <section class="preview" v-if="rolls.length > 0">
-      <div class="dice_wrapper" v-for="(roll, index) in rolls" :key="index">
-        <Dice :roll="roll" />
-      </div>
+      <Dice v-for="(roll, index) in rolls" :key="index" :roll="roll" />
     </section>
     <section v-else-if="showWarning" class="warning">Select a number of rolles first</section>
   </section>
@@ -77,7 +75,10 @@ const handleSelection = (e: Event) => {
   --gap: 5px;
 }
 
+
+
 form label {
+  font-size: 1rem;
   font-weight: bold;
 }
 
@@ -130,28 +131,27 @@ form {
   gap: var(--gap);
 }
 
-.dice_wrapper {
-  border-radius: var(--borderRadius);
-  background-color: white;
-  width: 5rem;
-  height: 5rem;
-  border: .2px solid black;
-  border-radius: 0.5rem;
-  padding: 2px;
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  gap: .5rem;
-  grid-template-areas: "first-start first-middle first-end"
-    "second-start second-middle second-end"
-    "third-start third-middle third-end"
-}
-
 .warning {
   font-size: 0.8rem;
   color: red;
   text-align: center;
+}
+
+@media screen and (max-width:768px) {
+  .dice_roller {
+    width: 100%;
+  }
+
+  .preview {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  }
+}
+
+@media screen and (max-width:576px) {
+  .preview {
+    /* justify-items: start; */
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    overflow-x: scroll;
+  }
 }
 </style>
