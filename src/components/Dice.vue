@@ -163,7 +163,7 @@ const activeRoll = computed(() => {
     height: 5rem;
     border: .2px solid black;
     border-radius: 0.5rem;
-    padding: 2px;
+    padding: .5rem;
     display: grid;
     justify-content: center;
     align-items: center;
